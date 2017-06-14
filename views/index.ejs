@@ -1,10 +1,10 @@
 <% include ./partials/header %>
 
-<h1>index page</h1>
+<h1>Blogs page</h1>
 
 <% blogs.forEach(function(blog) { %>
   <div>
-    <li><%=blog.title%></li>
+    <h2><%=blog.title%></h2>
     <img src="<%=blog.image%>">
     <span><%=blog.created%></span>
     <p><%=blog.body%></p>

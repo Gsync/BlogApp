@@ -8,7 +8,7 @@ const express     = require('express'),
 
 //APP CONFIG
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static("public/"));
 app.use(bodyParser.urlencoded({extended: true}));
 
 //DATABASE CONFIG
@@ -24,15 +24,16 @@ var blogSchema = new mongoose.Schema({
 
 var Blog = mongoose.model("Blog", blogSchema);
 
-//CREATE COLLECTION DATA
+// CREATE COLLECTION DATA
 // Blog.create({
 //     title: "Test Blog",
 //     image: "images/scene.jpg",
 //     body: "Beautiful scenery"
 //             });
 
-//RESTFUL ROUTES
+//---RESTFUL ROUTES---//
 
+//Index Route
 app.get("/blogs", function(req, res) {
   Blog.find({}, function(err, blogs) {
     if (err) {
@@ -43,11 +44,26 @@ app.get("/blogs", function(req, res) {
   });
 });
 
+//Root Route
 app.get("/", function(req, res) {
   res.redirect("/blogs");
 });
 
+//New Route
+app.get("/blogs/new", function(req, res) {
+  res.render("new");
+});
 
+//Create Route
+app.post("/blogs", function(req, res) {
+  Blog.create(req.body.blog, function(err) {
+    if (err) {
+      console.log("Error!");
+    } else {
+      res.redirect("/blogs");
+    }
+  });
+});
 
 app.listen(PORT, function() {
   console.log("Server is running on: " + PORT);
