@@ -1,15 +1,17 @@
 /*jshint esversion:6*/
 
-const express     = require('express'),
-      bodyParser  = require('body-parser'),
-      mongoose    = require('mongoose'),
-      app         = express(),
-      PORT        = process.env.PORT || 5000;
+const express         = require('express'),
+      bodyParser      = require('body-parser'),
+      methodOverride  = require('method-override'),
+      mongoose        = require('mongoose'),
+      app             = express(),
+      PORT            = process.env.PORT || 5000;
 
 //APP CONFIG
 app.set("view engine", "ejs");
 app.use(express.static("public/"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 //DATABASE CONFIG
 mongoose.connect("mongodb://localhost/blogapp");
@@ -72,6 +74,28 @@ app.get("/blogs/:id", function(req, res) {
       console.log("Error!");
     } else {
       res.render("show", {blog: blog});
+    }
+  });
+});
+
+//Edit Route
+app.get("/blogs/:id/edit", function(req, res) {
+    Blog.findById(req.params.id, function(err, blog) {
+    if (err) {
+      res.redirect("/blogs");
+    } else {
+      res.render("edit", {blog: blog});
+    }
+  });
+});
+
+//Update Route
+app.put("/blogs/:id", function(req, res) {
+   Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, blog) {
+    if (err) {
+      res.redirect("/blogs");
+    } else {
+      res.redirect("/blogs/" + req.params.id); //Redirects to show page
     }
   });
 });
