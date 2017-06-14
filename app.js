@@ -65,6 +65,17 @@ app.post("/blogs", function(req, res) {
   });
 });
 
+//Show Route
+app.get("/blogs/:id", function(req, res) {
+  Blog.findById(req.params.id, function(err, blog) {
+    if (err) {
+      console.log("Error!");
+    } else {
+      res.render("show", {blog: blog});
+    }
+  });
+});
+
 app.listen(PORT, function() {
   console.log("Server is running on: " + PORT);
 });
