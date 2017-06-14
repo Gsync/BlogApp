@@ -25,15 +25,26 @@ var blogSchema = new mongoose.Schema({
 var Blog = mongoose.model("Blog", blogSchema);
 
 //CREATE COLLECTION DATA
-Blog.create({
-    title: "Test Blog",
-    image: ""
-            });
+// Blog.create({
+//     title: "Test Blog",
+//     image: "images/scene.jpg",
+//     body: "Beautiful scenery"
+//             });
 
 //RESTFUL ROUTES
 
+app.get("/blogs", function(req, res) {
+  Blog.find({}, function(err, blogs) {
+    if (err) {
+      console.log("Error!");
+    } else {
+  res.render("index", {blogs: blogs});
+    }
+  });
+});
+
 app.get("/", function(req, res) {
-  res.send("<h1>hello from server</h1>");
+  res.redirect("/blogs");
 });
 
 
